@@ -2,6 +2,7 @@
 using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Mango.Web.Controllers
 {
@@ -42,6 +43,34 @@ namespace Mango.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _couponService.GetCouponByIdAsync(id);
+
+                if (response != null && response.IsSuccess)
+                {
+                    var model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
+
+                    return View(model);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CouponDto model)
+        {            
+            var response = await _couponService.DeleteCouponAsync(model.CouponId);
+
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }            
             return View(model);
         }
     }
