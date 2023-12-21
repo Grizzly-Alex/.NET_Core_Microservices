@@ -10,6 +10,7 @@ namespace Mango.Web.Service
     public sealed class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+
         public BaseService(IHttpClientFactory httpClientFactory) 
         {
             _httpClientFactory = httpClientFactory;
