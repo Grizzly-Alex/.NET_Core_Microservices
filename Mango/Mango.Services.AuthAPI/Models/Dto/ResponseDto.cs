@@ -1,4 +1,4 @@
-﻿namespace Mango.Services.CouponAPI.Data
+﻿namespace Mango.Services.AuthAPI.Models.Dto
 {
     public sealed class ResponseDto
     {
