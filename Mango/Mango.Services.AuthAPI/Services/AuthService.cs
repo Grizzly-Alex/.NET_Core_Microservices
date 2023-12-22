@@ -31,7 +31,7 @@ namespace Mango.Services.AuthAPI.Services
             throw new NotImplementedException();
         }
 
-        public async Task<UserDto> Register(RegistrationRequestDto registrationRequestDto)
+        public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
         {
             AppUser user = _mapper.Map<AppUser>(registrationRequestDto);
 
@@ -42,15 +42,20 @@ namespace Mango.Services.AuthAPI.Services
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.Users.First(user => user.UserName == registrationRequestDto.Email);
+                    UserDto userDto = _mapper.Map<UserDto>(userToReturn);
 
-                    return _mapper.Map<UserDto>(userToReturn);
+                    return string.Empty;
+                }
+                else
+                {
+                    return result.Errors.FirstOrDefault().Description;
                 }
             }
             catch (Exception ex)
             {
 
             }
-            return new();
+            return "Error Encountered";
         }
     }
 }

@@ -13,9 +13,10 @@ namespace Mango.Services.AuthAPI
                 config.CreateMap<AppUser, RegistrationRequestDto>()
                     .ForMember(dest => dest.Email, act => act.MapFrom(src => src.UserName))
                     .ForMember(dest => dest.Email, act => act.MapFrom(src => src.Email))
-                    .ForMember(dest => dest.Email.ToLower(), act => act.MapFrom(src => src.NormalizedEmail))
+                    .ForMember(dest => dest.Email, act => act.MapFrom(src => src.NormalizedEmail))
                     .ForMember(dest => dest.Name, act => act.MapFrom(src => src.Name))
                     .ForMember(dest => dest.PhoneNumber, act => act.MapFrom(src => src.PhoneNumber))
+                    .AfterMap((src, dest) => src.NormalizedEmail?.ToUpper())
                     .ReverseMap();
 
                 config.CreateMap<AppUser, UserDto>()
