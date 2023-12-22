@@ -24,7 +24,6 @@ namespace Mango.Services.AuthAPI
                     .ForMember(dest => dest.Name, act => act.MapFrom(src => src.Name))
                     .ForMember(dest => dest.PhoneNumber, act => act.MapFrom(src => src.PhoneNumber))
                     .ReverseMap();
-
             });
         }
     }
