@@ -1,4 +1,5 @@
-﻿using Mango.Services.AuthAPI.Data;
+﻿using AutoMapper;
+using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Services.IService;
@@ -11,15 +12,18 @@ namespace Mango.Services.AuthAPI.Services
         private readonly AppDbContext _db;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMapper _mapper;
 
         public AuthService(
             AppDbContext db,
             UserManager<AppUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IMapper mapper)
         {
             _db = db;    
             _userManager = userManager;
             _roleManager = roleManager;
+            _mapper = mapper;   
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -29,7 +33,24 @@ namespace Mango.Services.AuthAPI.Services
 
         public async Task<UserDto> Register(RegistrationRequestDto registrationRequestDto)
         {
-            throw new NotImplementedException();
+            AppUser user = _mapper.Map<AppUser>(registrationRequestDto);
+
+            try
+            {
+                var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
+
+                if (result.Succeeded)
+                {
+                    var userToReturn = _db.Users.First(user => user.UserName == registrationRequestDto.Email);
+
+                    return _mapper.Map<UserDto>(userToReturn);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return new();
         }
     }
 }
