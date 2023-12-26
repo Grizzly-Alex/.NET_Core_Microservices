@@ -45,7 +45,7 @@ namespace Mango.Services.AuthAPI.Controllers
 
             _responseDto.Result = loginResponse;
 
-            return Ok();
+            return Ok(_responseDto);
         }
     }
 }

@@ -4,6 +4,7 @@ using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Services.IService;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Mango.Services.AuthAPI.Services
 {
@@ -13,45 +14,41 @@ namespace Mango.Services.AuthAPI.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthService(
             AppDbContext db,
             UserManager<AppUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            IMapper mapper,
+            IJwtTokenGenerator jwtTokenGenerator)
         {
             _db = db;    
             _userManager = userManager;
             _roleManager = roleManager;
-            _mapper = mapper;   
+            _mapper = mapper;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var user = _db.Users.FirstOrDefault(u => string.Equals(u.Name.ToUpper(), loginRequestDto.UserName.ToUpper()));
-
+            if (user is null) return new() { Token = string.Empty};
+                
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+            if (!isValid) return new() { Token = string.Empty };
 
-            if (user is null || !isValid) 
+            return new()
             {
-                return new LoginResponseDto() { User = null, Token = string.Empty};
-            }
-
-            UserDto userDto = new()
-            {
-                ID = user.Id,
-                Email = user.Email,
-                Name = user.Name,
-                PhoneNumber = user.PhoneNumber
+                User = new()
+                {
+                    ID = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber
+                },
+                Token = _jwtTokenGenerator.GenerateToken(user),
             };
-
-            LoginResponseDto loginResponseDto = new LoginResponseDto()
-            {
-                User = userDto,
-                Token = string.Empty,
-            };
-
-            return loginResponseDto;
         }
 
         public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
