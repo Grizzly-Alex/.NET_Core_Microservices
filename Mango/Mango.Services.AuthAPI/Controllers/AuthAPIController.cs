@@ -33,8 +33,18 @@ namespace Mango.Services.AuthAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
+            var loginResponse = await _authService.Login(model);  
+            if(loginResponse.User == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Username or password is incorrect";
+                return BadRequest(_responseDto);
+            }
+
+            _responseDto.Result = loginResponse;
+
             return Ok();
         }
     }
