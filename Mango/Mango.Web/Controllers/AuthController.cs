@@ -24,6 +24,5 @@ namespace Mango.Web.Controllers
         {
             return View();
         }
-
     }
 }
