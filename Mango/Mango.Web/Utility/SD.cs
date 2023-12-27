@@ -12,7 +12,7 @@
         public const string RoleCustomer = "CUSTOMER";
         #endregion
 
-
+        public const string TokenCookie = "JWTToken";
 
         public enum ApiType
         {
