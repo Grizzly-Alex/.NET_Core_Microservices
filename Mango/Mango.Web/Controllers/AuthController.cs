@@ -23,13 +23,47 @@ namespace Mango.Web.Controllers
         {
             var roleList = new List<SelectListItem>()
             {
-                new() { Value = SD.Role.Admin.ToString(), Text = SD.Role.Admin.ToString() },
-                new() { Value = SD.Role.Customer.ToString(), Text = SD.Role.Customer.ToString() },
+                new() { Value = SD.RoleAdmin, Text = SD.RoleAdmin },
+                new() { Value = SD.RoleCustomer, Text = SD.RoleCustomer },
             };
 
             ViewBag.RoleList = roleList;
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegistrationRequestDto obj)
+        {
+            ResponseDto result = await _authService.RegisterAsync(obj);
+            ResponseDto assingRole;
+
+            if (result != null && result.IsSuccess)
+            {
+                if (string.IsNullOrEmpty(obj.Role))
+                {
+                    obj.Role = SD.RoleCustomer;
+                }
+
+                assingRole = await _authService.AssignRoleAsync(obj);
+
+                if (assingRole != null && assingRole.IsSuccess)
+                {
+                    TempData["success"] = "Registration Successful";
+                    return RedirectToAction(nameof(Login));
+                }
+            }
+
+
+            var roleList = new List<SelectListItem>()
+            {
+                new() { Value = SD.RoleAdmin, Text = SD.RoleAdmin },
+                new() { Value = SD.RoleCustomer, Text = SD.RoleCustomer },
+            };
+
+            ViewBag.RoleList = roleList;
+
+            return View(obj);
         }
 
         [HttpPost]

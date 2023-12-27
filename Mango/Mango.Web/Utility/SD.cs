@@ -7,11 +7,12 @@
         public static string CouponAPIBase {  get; set; }
         #endregion
 
-        public enum Role
-        {
-            Admin,
-            Customer,
-        }
+        #region Roles
+        public const string RoleAdmin = "ADMIN";
+        public const string RoleCustomer = "CUSTOMER";
+        #endregion
+
+
 
         public enum ApiType
         {
