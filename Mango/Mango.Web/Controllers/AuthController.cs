@@ -111,6 +111,8 @@ namespace Mango.Web.Controllers
                 new (JwtRegisteredClaimNames.Email, jwt.Claims.FirstOrDefault(i => i.Type.Equals(JwtRegisteredClaimNames.Email)).Value),
                 new (JwtRegisteredClaimNames.Name, jwt.Claims.FirstOrDefault(i => i.Type.Equals(JwtRegisteredClaimNames.Name)).Value),
                 new (JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(i => i.Type.Equals(JwtRegisteredClaimNames.Sub)).Value),
+                new (ClaimTypes.Name, jwt.Claims.FirstOrDefault(i => i.Type.Equals(JwtRegisteredClaimNames.Email)).Value),
+                new (ClaimTypes.Role, jwt.Claims.FirstOrDefault(i => i.Type.Equals("role")).Value),
             };
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);

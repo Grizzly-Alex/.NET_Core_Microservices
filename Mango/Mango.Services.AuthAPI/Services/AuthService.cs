@@ -51,7 +51,7 @@ namespace Mango.Services.AuthAPI.Services
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            var user = _db.Users.FirstOrDefault(u => string.Equals(u.Name.ToUpper(), loginRequestDto.UserName.ToUpper()));
+            var user = _db.Users.FirstOrDefault(u => string.Equals(u.UserName.ToUpper(), loginRequestDto.UserName.ToUpper()));
             if (user is null) return new() { Token = string.Empty};
                 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
@@ -66,8 +66,8 @@ namespace Mango.Services.AuthAPI.Services
                     Name = user.Name,
                     PhoneNumber = user.PhoneNumber
                 },
-                Token = _jwtTokenGenerator.GenerateToken(user),
-            };
+                Token = _jwtTokenGenerator.GenerateToken(user, await _userManager.GetRolesAsync(user)),
+            };  
         }
 
         public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
