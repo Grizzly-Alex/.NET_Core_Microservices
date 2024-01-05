@@ -2,7 +2,18 @@
 {
     public sealed class SD
     {
+        #region API bases
+        public static string AuthAPIBase { get; set; }
         public static string CouponAPIBase {  get; set; }
+        #endregion
+
+        #region Roles
+        public const string RoleAdmin = "ADMIN";
+        public const string RoleCustomer = "CUSTOMER";
+        #endregion
+
+        public const string TokenCookie = "JWTToken";
+
         public enum ApiType
         {
             GET,
