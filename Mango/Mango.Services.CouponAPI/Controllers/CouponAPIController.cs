@@ -45,7 +45,7 @@ namespace Mango.Services.CouponAPI.Controllers
         {
             try
             {
-                Coupon obj = _db.Coupons.First(coupon => coupon.CouponId == id);
+                Coupon obj = _db.Coupons.First(coupon => coupon.Id == id);
                 _response.Result = _mapper.Map<CouponDto>(obj); 
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace Mango.Services.CouponAPI.Controllers
         {
             try
             {
-                Coupon obj = _db.Coupons.First(coupon => coupon.CouponCode.Equals(code));
+                Coupon obj = _db.Coupons.First(coupon => coupon.Code.Equals(code));
                 _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace Mango.Services.CouponAPI.Controllers
         {
             try
             {
-                Coupon obj = _db.Coupons.First(coupon => coupon.CouponId == id);
+                Coupon obj = _db.Coupons.First(coupon => coupon.Id == id);
 
                 _db.Coupons.Remove(obj);
                 _db.SaveChanges();               

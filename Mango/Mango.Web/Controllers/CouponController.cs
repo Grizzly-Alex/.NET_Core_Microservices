@@ -82,7 +82,7 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(CouponDto model)
         {            
-            var response = await _couponService.DeleteCouponAsync(model.CouponId);
+            var response = await _couponService.DeleteCouponAsync(model.Id);
 
             if (response != null && response.IsSuccess)
             {

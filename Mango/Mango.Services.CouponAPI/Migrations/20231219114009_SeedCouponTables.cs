@@ -14,7 +14,7 @@ namespace Mango.Services.CouponAPI.Migrations
         {
             migrationBuilder.InsertData(
                 table: "Coupons",
-                columns: new[] { "CouponId", "CouponCode", "DiscountAmount", "MinAmount" },
+                columns: new[] { "Id", "Code", "DiscountAmount", "MinAmount" },
                 values: new object[,]
                 {
                     { 1, "10OFF", 10.0, 20 },
@@ -27,12 +27,12 @@ namespace Mango.Services.CouponAPI.Migrations
         {
             migrationBuilder.DeleteData(
                 table: "Coupons",
-                keyColumn: "CouponId",
+                keyColumn: "Id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
                 table: "Coupons",
-                keyColumn: "CouponId",
+                keyColumn: "Id",
                 keyValue: 2);
         }
     }
