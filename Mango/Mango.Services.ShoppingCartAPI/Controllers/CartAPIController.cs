@@ -28,7 +28,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpGet("GetCart/{userId}")]
+        [HttpGet("get_cart/{userId}")]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -68,7 +68,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpPost("CartUpsert")]
+        [HttpPost("cart_upsert")]
         public async Task<ResponseDto> UpsertCart(CartDto cartDto)
         {
             try
@@ -126,7 +126,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpPost("RemoveCart")]
+        [HttpPost("remove_cart")]
         public async Task<ResponseDto> RemoveCart([FromBody]int cartDetailsId)
         {
             try
@@ -155,7 +155,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("ApplyCoupon")]
+        [HttpPost("apply_coupon")]
         public async Task<object> ApplyCoupon([FromBody] CartDto cartDto)
         {
             try
@@ -174,7 +174,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("RemoveCoupon")]
+        [HttpPost("remove_coupon")]
         public async Task<object> RemoveCoupon([FromBody] CartDto cartDto)
         {
             try
