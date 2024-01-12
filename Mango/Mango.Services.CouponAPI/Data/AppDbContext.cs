@@ -17,16 +17,16 @@ namespace Mango.Services.CouponAPI.Data
 
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
-                CouponId = 1,
-                CouponCode = "10OFF",
+                Id = 1,
+                Code = "10OFF",
                 DiscountAmount = 10,
                 MinAmount = 20,
             });
 
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
-                CouponId = 2,
-                CouponCode = "20OFF",
+                Id = 2,
+                Code = "20OFF",
                 DiscountAmount = 20,
                 MinAmount = 40,
             });
