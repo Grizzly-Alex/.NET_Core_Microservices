@@ -27,7 +27,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
 
         [HttpGet("GetCart/{userId}")]
-        public async Task<ResponseDto> Get(string userId)
+        public async Task<ResponseDto> GetCart(string userId)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
 
         [HttpPost("CartUpsert")]
-        public async Task<ResponseDto> Upsert(CartDto cartDto)
+        public async Task<ResponseDto> UpsertCart(CartDto cartDto)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
 
         [HttpPost("RemoveCart")]
-        public async Task<ResponseDto> Remove([FromBody]int cartDetailsId)
+        public async Task<ResponseDto> RemoveCart([FromBody]int cartDetailsId)
         {
             try
             {
@@ -142,5 +142,42 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
+        [HttpPost("ApplyCoupon")]
+        public async Task<object> ApplyCoupon([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                var cartFromDb = await _db.CartHeaders.FirstAsync(header => header.UserId == cartDto.CartHeader.UserId);
+                cartFromDb.CouponCode = cartDto.CartHeader.CouponCode;
+                _db.CartHeaders.Update(cartFromDb);
+                await _db.SaveChangesAsync();
+                _response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message.ToString();
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [HttpPost("RemoveCoupon")]
+        public async Task<object> RemoveCoupon([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                var cartFromDb = await _db.CartHeaders.FirstAsync(header => header.UserId == cartDto.CartHeader.UserId);
+                cartFromDb.CouponCode = string.Empty;
+                _db.CartHeaders.Update(cartFromDb);
+                await _db.SaveChangesAsync();
+                _response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message.ToString();
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
     }
 }
