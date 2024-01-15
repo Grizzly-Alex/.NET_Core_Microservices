@@ -2,7 +2,7 @@
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
 
-namespace Mango.Services.ProductAPI
+namespace Mango.Services.ShoppingCartAPI
 {
     public sealed class MappingConfig
     {

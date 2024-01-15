@@ -1,5 +1,5 @@
 using AutoMapper;
-using Mango.Services.ProductAPI;
+using Mango.Services.ShoppingCartAPI;
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Extensions;
 using Mango.Services.ShoppingCartAPI.Services;
