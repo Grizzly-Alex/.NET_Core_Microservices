@@ -18,7 +18,10 @@ namespace Mango.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Index() => View(await LoadCartDtoBasedOnLoggedInUser());
+        public async Task<IActionResult> Index() 
+        { 
+            return View(await LoadCartDtoBasedOnLoggedInUser()); 
+        }
 
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
@@ -26,8 +29,8 @@ namespace Mango.Web.Controllers
             var userId = User.Claims.Where(user => user.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
             ResponseDto? response = await _cartService.GetCartByUserIdAsync(userId);
 
-            return response != null & response.IsSuccess 
-                ? JsonConvert.DeserializeObject<CartDto>(Convert.ToString(response)) 
+            return response is not null && response.IsSuccess 
+                ? JsonConvert.DeserializeObject<CartDto>(Convert.ToString(response.Result)) 
                 : new CartDto();
         }
     }
