@@ -36,7 +36,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.DELETE,
+                ApiType = SD.ApiType.POST,
                 Data = cartDetailsId,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/remove_cart",
             });

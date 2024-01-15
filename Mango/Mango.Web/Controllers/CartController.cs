@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
+
 
 namespace Mango.Web.Controllers
 {
@@ -25,15 +25,18 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
-            var userId = User.Claims.Where(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
             ResponseDto? response = await _cartService.RemoveFromCartAsync(cartDetailsId);
 
             if (response is not null && response.IsSuccess)
             {
                 TempData["success"] = "Cart updated Successfully";
-                return RedirectToAction(nameof(Index));
             }
-            return View();
+            else
+            {
+                TempData["error"] = "Something went wrong";
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -41,12 +44,35 @@ namespace Mango.Web.Controllers
         {
             ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
 
+            if (response is not null && response.IsSuccess && response.Result is true)
+            {
+                TempData["success"] = "Cart updated Successfully";
+            }
+            else
+            {
+                TempData["error"] = "Something went wrong";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            cartDto.CartHeader.CouponCode = string.Empty;
+
+            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+
             if (response is not null && response.IsSuccess)
             {
                 TempData["success"] = "Cart updated Successfully";
-                return RedirectToAction(nameof(Index));
             }
-            return View();
+            else
+            {
+                TempData["error"] = "Something went wrong";
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()

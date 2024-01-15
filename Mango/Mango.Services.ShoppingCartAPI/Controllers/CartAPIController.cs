@@ -52,7 +52,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     CouponDto coupon = await _couponService.GetCouponAsync(cart.CartHeader.CouponCode);
                     if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
-                        cart.CartHeader.CartTotal -= coupon.MinAmount;
+                        cart.CartHeader.CartTotal -= coupon.DiscountAmount;
                         cart.CartHeader.Discount = coupon.DiscountAmount;
                     }
                 }
@@ -161,10 +161,11 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             try
             {
                 var cartFromDb = await _db.CartHeaders.FirstAsync(header => header.UserId == cartDto.CartHeader.UserId);
+               
                 cartFromDb.CouponCode = cartDto.CartHeader.CouponCode;
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
-                _response.Result = true;
+                _response.Result = true;                             
             }
             catch (Exception ex)
             {
