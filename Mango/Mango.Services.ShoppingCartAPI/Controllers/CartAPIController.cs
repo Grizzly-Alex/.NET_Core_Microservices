@@ -28,7 +28,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpGet("GetCart/{userId}")]
+        [HttpGet("get_cart/{userId}")]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -52,7 +52,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     CouponDto coupon = await _couponService.GetCouponAsync(cart.CartHeader.CouponCode);
                     if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
-                        cart.CartHeader.CartTotal -= coupon.MinAmount;
+                        cart.CartHeader.CartTotal -= coupon.DiscountAmount;
                         cart.CartHeader.Discount = coupon.DiscountAmount;
                     }
                 }
@@ -68,7 +68,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpPost("CartUpsert")]
+        [HttpPost("cart_upsert")]
         public async Task<ResponseDto> UpsertCart(CartDto cartDto)
         {
             try
@@ -126,7 +126,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpPost("RemoveCart")]
+        [HttpPost("remove_cart")]
         public async Task<ResponseDto> RemoveCart([FromBody]int cartDetailsId)
         {
             try
@@ -155,16 +155,17 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("ApplyCoupon")]
+        [HttpPost("apply_coupon")]
         public async Task<object> ApplyCoupon([FromBody] CartDto cartDto)
         {
             try
             {
                 var cartFromDb = await _db.CartHeaders.FirstAsync(header => header.UserId == cartDto.CartHeader.UserId);
+               
                 cartFromDb.CouponCode = cartDto.CartHeader.CouponCode;
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
-                _response.Result = true;
+                _response.Result = true;                             
             }
             catch (Exception ex)
             {
@@ -174,7 +175,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("RemoveCoupon")]
+        [HttpPost("remove_coupon")]
         public async Task<object> RemoveCoupon([FromBody] CartDto cartDto)
         {
             try
