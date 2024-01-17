@@ -1,4 +1,5 @@
 using AutoMapper;
+using Mango.AuthAPI.Utility;
 using Mango.Services.AuthAPI;
 using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
@@ -21,6 +22,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+SD.RegisterUserQueue = builder.Configuration["TopicAndQueueNames:RegisterUserQueue"];
+
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -30,7 +33,7 @@ builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
