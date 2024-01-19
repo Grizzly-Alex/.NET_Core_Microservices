@@ -1,4 +1,6 @@
+using Mango.EmailAPI.Utility;
 using Mango.Services.EmailAPI.Data;
+using Mango.Services.EmailAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,15 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionBuilder.UseSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+
+SD.EmailShoppingCart = builder.Configuration["EmailShoppingCartQueue:emailshoppingcart"];
+SD.EmailShoppingCart = builder.Configuration["RegisterUserQueue:registeruser"];
+SD.EmailShoppingCart = builder.Configuration["OrderCreatedTopic:OrderCreated"];
+SD.EmailShoppingCart = builder.Configuration["OrderCreated_Email_Subscription:OrderCreatedEmail"];
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
