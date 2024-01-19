@@ -2,9 +2,12 @@
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
+using Mango.Services.ShoppingCartAPI.RabbitMQSender;
 using Mango.Services.ShoppingCartAPI.Services.IServices;
+using Mango.ShoppingCartAPI.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
@@ -15,14 +18,22 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private readonly AppDbContext _db;
         private readonly IProductService _productService;
         private readonly ICouponService _couponService;
+        private readonly IMessageSender _messageBus;
         private ResponseDto _response;
         private IMapper _mapper;
+        
 
-        public CartAPIController(AppDbContext db, IProductService productService,  IMapper mapper, ICouponService couponService)
+        public CartAPIController(
+            AppDbContext db,
+            IProductService productService, 
+            IMapper mapper, 
+            IMessageSender messageBus,
+            ICouponService couponService)
         {
             _db = db;
             _productService = productService;
             _mapper = mapper;
+            _messageBus = messageBus;
             _response = new();
             _couponService = couponService;
         }
@@ -190,6 +201,22 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             {
                 _response.Message = ex.Message.ToString();
                 _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        [HttpPost("email_cart_request")]
+        public async Task<object> EmailCartRequest([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                _messageBus.SendMessage(cartDto, SD.EmailShoppingCartQueue);
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.ToString();
             }
             return _response;
         }

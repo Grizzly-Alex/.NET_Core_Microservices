@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Mango.Services.AuthAPI.RabbitMQSender
 {
-    public sealed class RabbitMQAuthMessageSender : IRabbitMQAuthMessageSender
+    public sealed class RabbitMQMessageSender : IMessageSender
     {
         private readonly string _hostName;
         private readonly string _userName;
         private readonly string _password;
         private IConnection _connection;
 
-        public RabbitMQAuthMessageSender()
+        public RabbitMQMessageSender()
         {
             _hostName = "localhost";
             _userName = "guest";
@@ -22,13 +22,13 @@ namespace Mango.Services.AuthAPI.RabbitMQSender
         {
             if (ConnectionExists())
             {
-                using var channel = _connection.CreateChannel();
+                using var channel = _connection.CreateModel();
                 channel.QueueDeclare(queueName, false, false, false, null);
 
                 var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);
 
-                channel.BasicPublish(exchange: string.Empty, routingKey: queueName, body: body);
+                channel.BasicPublish(exchange: string.Empty, routingKey: queueName, null, body: body);
             }
         }
 
