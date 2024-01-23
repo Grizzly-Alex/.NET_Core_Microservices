@@ -1,11 +1,13 @@
 using Mango.EmailAPI.Utility;
 using Mango.Services.EmailAPI.Data;
+using Mango.Services.EmailAPI.Messaging;
 using Mango.Services.EmailAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+SD.Initializing(builder.Configuration);
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
@@ -16,11 +18,8 @@ var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
-SD.EmailShoppingCart = builder.Configuration["EmailShoppingCartQueue:emailshoppingcart"];
-SD.EmailShoppingCart = builder.Configuration["RegisterUserQueue:registeruser"];
-SD.EmailShoppingCart = builder.Configuration["OrderCreatedTopic:OrderCreated"];
-SD.EmailShoppingCart = builder.Configuration["OrderCreated_Email_Subscription:OrderCreatedEmail"];
 
+builder.Services.AddHostedService<RabbitMQAuthConsumer>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
