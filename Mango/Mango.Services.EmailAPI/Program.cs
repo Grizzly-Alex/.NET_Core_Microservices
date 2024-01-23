@@ -20,6 +20,8 @@ builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 
 builder.Services.AddHostedService<RabbitMQAuthConsumer>();
+builder.Services.AddHostedService<RabbitMQCartConsumer>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
