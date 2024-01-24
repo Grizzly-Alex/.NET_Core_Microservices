@@ -17,8 +17,9 @@ namespace Mango.Services.OrderAPI
 
                 config.CreateMap<CartDetailsDto, OrderDetailsDto>()
                 .ForMember(dest => dest.ProductName, config => config.MapFrom(src => src.Product.Name))
-                .ForMember(dest => dest.Price, config => config.MapFrom(src => src.Product.Price))
-                .ReverseMap();
+                .ForMember(dest => dest.Price, config => config.MapFrom(src => src.Product.Price));
+
+                config.CreateMap<OrderDetailsDto, CartDetailsDto>();
 
                 config.CreateMap<OrderHeader, OrderHeaderDto>()
                 .ReverseMap();

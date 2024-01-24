@@ -15,6 +15,6 @@
         public string? PaymentIntentId { get; set; }
         public string? StriprSessionId { get; set; }
 
-        IEnumerable<OrderDetails> OrderDetails { get; set; }
+        public IEnumerable<OrderDetailsDto> OrderDetails { get; set; }
     }
 }
