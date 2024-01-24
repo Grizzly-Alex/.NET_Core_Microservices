@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mango.Service.OrderAPI.Models
+namespace Mango.Services.OrderAPI.Models
 {
     public sealed class OrderHeader
     {

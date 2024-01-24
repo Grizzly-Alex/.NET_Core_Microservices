@@ -1,6 +1,4 @@
-﻿using Mango.Services.OrderAPI.Models.Dto;
-
-namespace Mango.Service.OrderAPI.Models.Dto
+﻿namespace Mango.Services.OrderAPI.Models.Dto
 {
     public sealed class OrderDetailsDto
     {
