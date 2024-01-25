@@ -26,8 +26,8 @@ namespace Mango.Services.OrderAPI.Controllers
             _productService = productService;
         }
 
-
-        //[Authorize]
+         
+        [Authorize]
         [HttpPost("create_order")]
         public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
         {
@@ -38,6 +38,7 @@ namespace Mango.Services.OrderAPI.Controllers
                 orderHeaderDto.Status = SD.StatusPending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
                 OrderHeader orderCreated = _db.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
+                
                 await _db.SaveChangesAsync();
 
                 orderHeaderDto.Id = orderCreated.Id;

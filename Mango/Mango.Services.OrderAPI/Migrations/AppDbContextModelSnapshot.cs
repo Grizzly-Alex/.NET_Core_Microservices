@@ -25,10 +25,7 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderDetails", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CartHeaderId")
                         .HasColumnType("int");
@@ -59,10 +56,7 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CouponCode")
                         .HasColumnType("nvarchar(max)");
@@ -105,10 +99,15 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderDetails", b =>
                 {
                     b.HasOne("Mango.Services.OrderAPI.Models.OrderHeader", "OrderHeader")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderHeaderId");
 
                     b.Navigation("OrderHeader");
+                });
+
+            modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

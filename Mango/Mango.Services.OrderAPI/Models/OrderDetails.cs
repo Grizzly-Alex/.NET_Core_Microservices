@@ -7,6 +7,7 @@ namespace Mango.Services.OrderAPI.Models
     public sealed class OrderDetails
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public int CartHeaderId { get; set; }
         [ForeignKey("OrderHeaderId")]
