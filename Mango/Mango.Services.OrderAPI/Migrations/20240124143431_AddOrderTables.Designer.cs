@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240124113922_AddOrderTables")]
+    [Migration("20240124143431_AddOrderTables")]
     partial class AddOrderTables
     {
         /// <inheritdoc />

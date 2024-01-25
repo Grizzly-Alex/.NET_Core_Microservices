@@ -18,7 +18,7 @@ namespace Mango.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
 
-        public OrderAPIController(ResponseDto response, IMapper mapper, AppDbContext db, IProductService productService)
+        public OrderAPIController(IMapper mapper, AppDbContext db, IProductService productService)
         {
             _response = new ResponseDto();
             _mapper = mapper;
@@ -26,7 +26,8 @@ namespace Mango.Services.OrderAPI.Controllers
             _productService = productService;
         }
 
-        [Authorize]
+
+        //[Authorize]
         [HttpPost("create_order")]
         public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
         {
