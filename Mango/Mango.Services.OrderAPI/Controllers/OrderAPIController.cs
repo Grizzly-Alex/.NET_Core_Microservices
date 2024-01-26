@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using Mango.OrderAPI.Utility;
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.Checkout;
+
 
 namespace Mango.Services.OrderAPI.Controllers
 {
@@ -68,6 +68,7 @@ namespace Mango.Services.OrderAPI.Controllers
                     SuccessUrl = stripeRequestDto.ApprovedUrl,
                     CancelUrl = stripeRequestDto.CancelUrl,
                     Mode = "payment",
+                    LineItems = new List<SessionLineItemOptions>()
                 };
 
                 stripeRequestDto.OrderHeader.OrderDetails.ToList()
@@ -75,16 +76,15 @@ namespace Mango.Services.OrderAPI.Controllers
                     {
                         Quantity = item.Count,
                         PriceData = new SessionLineItemPriceDataOptions
-                        {                            
+                        {
                             UnitAmount = (long)item.Price * 100,
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = item.ProductName
-                            },                                                     
+                                Name = item.Product.Name
+                            },
                         },
                     }));
-                
 
                 var service = new SessionService();
                 Session  session = service.Create(options);

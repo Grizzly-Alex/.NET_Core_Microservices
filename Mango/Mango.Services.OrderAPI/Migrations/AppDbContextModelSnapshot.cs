@@ -25,7 +25,10 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderDetails", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CartHeaderId")
                         .HasColumnType("int");
@@ -56,7 +59,10 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CouponCode")
                         .HasColumnType("nvarchar(max)");

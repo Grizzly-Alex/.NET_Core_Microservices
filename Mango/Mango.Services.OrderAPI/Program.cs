@@ -8,7 +8,6 @@ using Mango.Services.OrderAPI.Utility;
 using Mango.Services.OrderAPI.Services.IServices;
 using Mango.Services.OrderAPI.Services;
 using Mango.Services.OrderAPI.Extensions;
-using Stripe;
 using Mango.OrderAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 builder.Services.AddHttpContextAccessor();
