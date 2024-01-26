@@ -52,6 +52,11 @@ namespace Mango.Web.Controllers
             return RedirectToAction(nameof(Checkout));
         }
 
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            return View(orderId);
+        }
+
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             ResponseDto? response = await _cartService.RemoveFromCartAsync(cartDetailsId);
