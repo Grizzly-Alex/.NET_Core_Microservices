@@ -1,4 +1,5 @@
 using AutoMapper;
+using Mango.CouponAPI.Utility;
 using Mango.Services.CouponAPI;
 using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Extensions;
@@ -7,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+SD.Initializing(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

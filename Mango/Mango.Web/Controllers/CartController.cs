@@ -1,9 +1,11 @@
 ﻿using Mango.Web.Models;
 using Mango.Web.Service.IService;
+using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 
 namespace Mango.Web.Controllers
@@ -47,9 +49,39 @@ namespace Mango.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 //get stripe session and redirect to stripe to place order
+                var domain = $"{Request.Scheme}://{Request.Host.Value}/";
+
+                StripeRequestDto stripeRequestDto = new()
+                {
+                    ApprovedUrl = $"{domain}{RouteData.Values["controller"]}/{nameof(Confirmation)}?orderId={orderHeaderDto.Id}",
+                    CancelUrl = $"{domain}{RouteData.Values["controller"]}/{nameof(Checkout)}",
+                    OrderHeader = orderHeaderDto,
+                };
+
+                var stripeResponse = await _orderService.CreateStripeSessionAsync(stripeRequestDto);
+                var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDto>(Convert.ToString(stripeResponse.Result));
+                Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+                return new StatusCodeResult((int)HttpStatusCode.RedirectMethod);
             }
 
             return RedirectToAction(nameof(Checkout));
+        }
+
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            ResponseDto? response = await _orderService.ValidateStripeSessionAsync(orderId);
+
+            if (response is not null && response.IsSuccess)
+            {
+                OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+                if (orderHeader.Status.Equals(SD.StatusApproved, StringComparison.OrdinalIgnoreCase))
+                {
+                    return View(orderId);
+                }
+            }
+            //redirect to error page
+            return View(orderId);
         }
 
         public async Task<IActionResult> Remove(int cartDetailsId)

@@ -8,8 +8,11 @@ using Mango.Services.OrderAPI.Utility;
 using Mango.Services.OrderAPI.Services.IServices;
 using Mango.Services.OrderAPI.Services;
 using Mango.Services.OrderAPI.Extensions;
+using Mango.OrderAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+
+SD.Initializing(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -69,6 +72,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

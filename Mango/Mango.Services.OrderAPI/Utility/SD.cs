@@ -11,5 +11,12 @@
 
         public const string RoleAdmin = "ADMIN";
         public const string RoleCustomer = "CUSTOMER";
+
+        public static string StripeSessionKey {  get; set; }
+
+        public static void Initializing(IConfiguration config)
+        {
+            StripeSessionKey = config["Stripe:SecretKey"];
+        }
     }
 }

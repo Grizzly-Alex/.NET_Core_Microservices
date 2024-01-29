@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240125140343_AddOrderTable")]
+    [Migration("20240126120440_AddOrderTable")]
     partial class AddOrderTable
     {
         /// <inheritdoc />
@@ -28,7 +28,10 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderDetails", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CartHeaderId")
                         .HasColumnType("int");
@@ -59,7 +62,10 @@ namespace Mango.Services.OrderAPI.Migrations
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CouponCode")
                         .HasColumnType("nvarchar(max)");

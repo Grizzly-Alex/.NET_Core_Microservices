@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Mango.Services.OrderAPI.Models
@@ -7,7 +6,6 @@ namespace Mango.Services.OrderAPI.Models
     public sealed class OrderHeader
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public string? UserId { get; set; }
         public string? CouponCode { get; set; }
