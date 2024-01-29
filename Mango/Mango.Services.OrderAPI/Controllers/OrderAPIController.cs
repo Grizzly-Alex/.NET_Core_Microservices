@@ -27,6 +27,7 @@ namespace Mango.Services.OrderAPI.Controllers
             _mapper = mapper;
             _db = db;
             _productService = productService;
+            StripeConfiguration.ApiKey = SD.StripeSessionKey;
         }
 
          
@@ -61,8 +62,6 @@ namespace Mango.Services.OrderAPI.Controllers
         {
             try
             {
-                StripeConfiguration.ApiKey = SD.StripeSessionKey;
-
                 var options = new SessionCreateOptions
                 {
                     SuccessUrl = stripeRequestDto.ApprovedUrl,
@@ -100,6 +99,37 @@ namespace Mango.Services.OrderAPI.Controllers
                 await _db.SaveChangesAsync();
 
                 _response.Result = stripeRequestDto;
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
+            }
+
+            return _response;
+        }
+
+        [Authorize]
+        [HttpPost("validate_stripe_session")]
+        public async Task<ResponseDto> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
+                OrderHeader orderHeader = _db.OrderHeaders.First(orderHeader => orderHeader.Id == orderHeaderId);
+                SessionService service = new();
+                Session session = service.Get(orderHeader.StriprSessionId);
+                PaymentIntentService paymentintentService = new();
+                PaymentIntent paymentIntent = paymentintentService.Get(session.PaymentIntentId);
+
+                if(paymentIntent.Status.Equals("succeeded", StringComparison.OrdinalIgnoreCase))
+                {
+                    //then payment was successful
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = SD.StatusApproved;
+                    _db.SaveChanges();
+
+                    _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+                }
             }
             catch (Exception ex)
             {
