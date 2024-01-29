@@ -134,7 +134,6 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 Coupon coupon = _db.Coupons.First(coupon => coupon.Id == id);
-
                 _db.Coupons.Remove(coupon);
                 _db.SaveChanges();
 
