@@ -128,6 +128,13 @@ namespace Mango.Services.OrderAPI.Controllers
                     orderHeader.Status = SD.StatusApproved;
                     _db.SaveChanges();
 
+                    RewardsDto rewardsDto = new RewardsDto
+                    {
+                        OrderId = orderHeader.Id,
+                        RewardsActivity = Convert.ToInt32(orderHeader.Total),
+                        UserId = orderHeader.UserId,
+                    };
+
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
             }
