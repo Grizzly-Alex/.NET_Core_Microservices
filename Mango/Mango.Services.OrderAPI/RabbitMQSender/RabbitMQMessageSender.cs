@@ -18,17 +18,17 @@ namespace Mango.Services.OrderAPI.RabbitMQSender
             _password = "guest";             
         }
 
-        public void SendMessage(object message, string queueName)
+        public void SendMessage(object message, string exchangeName)
         {
             if (ConnectionExists())
             {
                 using var channel = _connection.CreateModel();
-                channel.QueueDeclare(queueName, false, false, false, null);
+                channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout, durable:false, );
 
                 var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);
 
-                channel.BasicPublish(exchange: string.Empty, routingKey: queueName, null, body: body);
+                channel.BasicPublish(exchange: exchangeName, string.Empty, null, body: body);
             }
         }
 

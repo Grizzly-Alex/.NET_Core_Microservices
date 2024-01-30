@@ -2,6 +2,6 @@
 {
     public interface IMessageSender
     {
-        void SendMessage(object message, string queueName);
+        void SendMessage(object message, string exchangeName);
     }
 }
