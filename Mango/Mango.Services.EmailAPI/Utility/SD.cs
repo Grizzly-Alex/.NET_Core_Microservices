@@ -12,7 +12,7 @@
             EmailShoppingCart = config["TopicAndQueueNames:EmailShoppingCartQueue"];
             RegisterUser = config["TopicAndQueueNames:RegisterUserQueue"];
             OrderCreated = config["TopicAndQueueNames:OrderCreatedTopic"];
-            OrderCreatedEmail = config["TopicAndQueueNames:OrderCreated_Email_Subscription"];
+            OrderCreatedEmail = config["TopicAndQueueNames:OrderCreatedEmailSubscription"];
         }
     }
 }

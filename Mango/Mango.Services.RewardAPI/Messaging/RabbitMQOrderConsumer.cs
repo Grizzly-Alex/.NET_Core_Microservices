@@ -1,24 +1,23 @@
-﻿using Mango.EmailAPI.Utility;
-using Mango.Services.EmailAPI.Message;
-using Mango.Services.EmailAPI.Services;
+﻿using Mango.Services.RewardAPI.Services;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using Mango.RewardAPI.Utility;
+using Mango.Services.RewardAPI.Message;
 
 namespace Mango.Services.EmailAPI.Messaging
 {
     public class RabbitMQOrderConsumer : BackgroundService
     {   
-        private readonly EmailService _emailService;
+        private readonly RewardService _rewardService;
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly string queueName;
 
-
-        public RabbitMQOrderConsumer(EmailService emailService)
+        public RabbitMQOrderConsumer(RewardService rewardService)
         {
-            _emailService = emailService;
+            _rewardService = rewardService;
 
             var factory = new ConnectionFactory
             {
@@ -28,11 +27,11 @@ namespace Mango.Services.EmailAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(SD.OrderCreated, ExchangeType.Fanout);
+            _channel.ExchangeDeclare(SD.OrderCreatedTopic, ExchangeType.Fanout);
 
             queueName = _channel.QueueDeclare().QueueName;
 
-            _channel.QueueBind(queueName, SD.OrderCreated, string.Empty);
+            _channel.QueueBind(queueName, SD.OrderCreatedTopic, string.Empty);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -56,7 +55,7 @@ namespace Mango.Services.EmailAPI.Messaging
 
         private async Task HandleMessage(RewardsMessage rewardsMessage)
         {
-           await _emailService.LogOrderPlaced(rewardsMessage);
+           await _rewardService.UpdateRewards(rewardsMessage);
         }
     }
 }

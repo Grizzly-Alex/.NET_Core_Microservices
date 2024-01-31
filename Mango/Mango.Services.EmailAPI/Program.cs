@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 SD.Initializing(builder.Configuration);
 
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -15,9 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionBuilder.UseSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
-
 
 builder.Services.AddHostedService<RabbitMQAuthConsumer>();
 builder.Services.AddHostedService<RabbitMQCartConsumer>();
