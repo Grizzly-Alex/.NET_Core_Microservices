@@ -23,7 +23,7 @@ namespace Mango.Services.OrderAPI.RabbitMQSender
             if (ConnectionExists())
             {
                 using var channel = _connection.CreateModel();
-                channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout, durable:false, );
+                channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout, durable:false);
 
                 var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);

@@ -9,6 +9,7 @@ using Mango.Services.OrderAPI.Services.IServices;
 using Mango.Services.OrderAPI.Services;
 using Mango.Services.OrderAPI.Extensions;
 using Mango.OrderAPI.Utility;
+using Mango.Services.OrderAPI.RabbitMQSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +26,9 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductService, ProductService>();
 
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddScoped<IMessageSender, RabbitMQMessageSender>();
 
 builder.Services.AddHttpClient("Product", config
     => config.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]))

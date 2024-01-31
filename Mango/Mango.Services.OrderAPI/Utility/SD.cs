@@ -13,10 +13,12 @@
         public const string RoleCustomer = "CUSTOMER";
 
         public static string StripeSessionKey {  get; set; }
+        public static string OrderCreatedTopic { get; set; }
 
         public static void Initializing(IConfiguration config)
         {
             StripeSessionKey = config["Stripe:SecretKey"];
+            OrderCreatedTopic = config["TopicAndQueueNames:OrderCreatedTopic"];
         }
     }
 }
