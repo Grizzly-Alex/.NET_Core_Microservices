@@ -33,11 +33,11 @@ namespace Mango.Services.EmailAPI.Messaging
         {
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (ch, ea) =>
+            consumer.Received += async (ch, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 CartDto cart = JsonConvert.DeserializeObject<CartDto>(content);
-                HandleMessage(cart).GetAwaiter().GetResult();
+                await HandleMessage(cart);
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
@@ -49,7 +49,7 @@ namespace Mango.Services.EmailAPI.Messaging
 
         private async Task HandleMessage(CartDto cart)
         {
-            _emailService.EmailCartAndLog(cart).GetAwaiter().GetResult();
+            await _emailService.EmailCartAndLog(cart);
         }
     }
 }

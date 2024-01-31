@@ -1,7 +1,7 @@
-﻿using Mango.Services.RewardsAPI.Models;
+﻿using Mango.Services.RewardAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mango.Services.RewardsAPI.Data
+namespace Mango.Services.RewardAPI.Data
 {
     public sealed class AppDbContext : DbContext
     {

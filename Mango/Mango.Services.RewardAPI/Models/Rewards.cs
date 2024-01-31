@@ -1,4 +1,4 @@
-﻿namespace Mango.Services.RewardsAPI.Models
+﻿namespace Mango.Services.RewardAPI.Models
 {
     public sealed class Rewards
     {

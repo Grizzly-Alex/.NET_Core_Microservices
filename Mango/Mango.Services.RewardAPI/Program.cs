@@ -1,6 +1,6 @@
 using AutoMapper;
-using Mango.RewardsAPI.Utility;
-using Mango.Services.RewardsAPI.Data;
+using Mango.RewardAPI.Utility;
+using Mango.Services.RewardAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

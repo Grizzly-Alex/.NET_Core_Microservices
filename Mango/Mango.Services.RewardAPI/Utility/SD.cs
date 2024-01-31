@@ -1,4 +1,4 @@
-﻿namespace Mango.RewardsAPI.Utility
+﻿namespace Mango.RewardAPI.Utility
 {
     public sealed class SD
     {

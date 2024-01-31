@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mango.Services.RewardsAPI.Migrations
+namespace Mango.Services.RewardAPI.Migrations
 {
     /// <inheritdoc />
     public partial class AddrewardsTable : Migration

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net.Http.Headers;
 
-namespace Mango.Services.OrderAPI.Utility
+namespace Mango.Services.RewardAPI.Utility
 {
     public sealed class BackendApiAuthenticationHttpClientHandler : DelegatingHandler
     {
