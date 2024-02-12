@@ -26,30 +26,30 @@ namespace Mango.Services.EmailAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(SD.EmailShoppingCart, false, false, false, null); ;
+            _channel.QueueDeclare(SD.EmailShoppingCartQueue, false, false, false, null); ;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (ch, ea) =>
+            consumer.Received += async (ch, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 CartDto cart = JsonConvert.DeserializeObject<CartDto>(content);
-                HandleMessage(cart).GetAwaiter().GetResult();
+                await HandleMessage(cart);
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            _channel.BasicConsume(SD.EmailShoppingCart, false, consumer);
+            _channel.BasicConsume(SD.EmailShoppingCartQueue, false, consumer);
 
             return Task.CompletedTask;
         }
 
         private async Task HandleMessage(CartDto cart)
         {
-            _emailService.EmailCartAndLog(cart).GetAwaiter().GetResult();
+            await _emailService.EmailCartAndLog(cart);
         }
     }
 }

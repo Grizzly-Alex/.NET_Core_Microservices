@@ -3,6 +3,7 @@ using Mango.OrderAPI.Utility;
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Models.Dto;
+using Mango.Services.OrderAPI.RabbitMQSender;
 using Mango.Services.OrderAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,21 @@ namespace Mango.Services.OrderAPI.Controllers
         protected ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
+        private readonly IMessageSender _messageSender;
         private IProductService _productService;
 
-        public OrderAPIController(IMapper mapper, AppDbContext db, IProductService productService)
+
+        public OrderAPIController(
+            IMapper mapper,
+            AppDbContext db,
+            IProductService productService,
+            IMessageSender messageSender)
         {
             _response = new ResponseDto();
             _mapper = mapper;
             _db = db;
             _productService = productService;
+            _messageSender = messageSender;
             StripeConfiguration.ApiKey = SD.StripeSessionKey;
         }
 
@@ -127,6 +135,15 @@ namespace Mango.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.StatusApproved;
                     _db.SaveChanges();
+
+                    RewardsDto rewardsDto = new RewardsDto
+                    {
+                        OrderId = orderHeader.Id,
+                        RewardsActivity = Convert.ToInt32(orderHeader.Total),
+                        UserId = orderHeader.UserId,
+                    };
+
+                    _messageSender.SendMessage(rewardsDto, SD.OrderCreatedTopic);
 
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }

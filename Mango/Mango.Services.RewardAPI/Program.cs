@@ -1,13 +1,14 @@
-using Mango.EmailAPI.Utility;
-using Mango.Services.EmailAPI.Data;
+using Mango.RewardAPI.Utility;
 using Mango.Services.EmailAPI.Messaging;
-using Mango.Services.EmailAPI.Services;
+using Mango.Services.RewardAPI.Data;
+using Mango.Services.RewardAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 SD.Initializing(builder.Configuration);
 
+// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -15,10 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+builder.Services.AddSingleton(new RewardService(optionBuilder.Options));
 
-builder.Services.AddHostedService<RabbitMQAuthConsumer>();
-builder.Services.AddHostedService<RabbitMQCartConsumer>();
 builder.Services.AddHostedService<RabbitMQOrderConsumer>();
 
 builder.Services.AddControllers();
@@ -35,7 +34,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
