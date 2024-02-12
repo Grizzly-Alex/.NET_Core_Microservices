@@ -28,11 +28,11 @@ namespace Mango.Services.EmailAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(SD.OrderCreated, ExchangeType.Fanout);
+            _channel.ExchangeDeclare(SD.OrderCreatedTopic, ExchangeType.Direct);
 
-            queueName = _channel.QueueDeclare().QueueName;
+            queueName = _channel.QueueDeclare(SD.OrderCreatedEmailUpdateQueue, false, false, false, null);
 
-            _channel.QueueBind(queueName, SD.OrderCreated, string.Empty);
+            _channel.QueueBind(SD.OrderCreatedEmailUpdateQueue, SD.OrderCreatedTopic, SD.RoutingKeyForUpdateQueue);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,7 +49,7 @@ namespace Mango.Services.EmailAPI.Messaging
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            _channel.BasicConsume(queueName, false, consumer);
+            _channel.BasicConsume(SD.OrderCreatedEmailUpdateQueue, false, consumer);
 
             return Task.CompletedTask;
         }

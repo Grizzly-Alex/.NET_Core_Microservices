@@ -25,7 +25,7 @@ namespace Mango.Services.EmailAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(SD.RegisterUser, false, false, false, null); ;
+            _channel.QueueDeclare(SD.RegisterUserQueue, false, false, false, null); ;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,7 +41,7 @@ namespace Mango.Services.EmailAPI.Messaging
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            _channel.BasicConsume(SD.RegisterUser, false, consumer);
+            _channel.BasicConsume(SD.RegisterUserQueue, false, consumer);
 
             return Task.CompletedTask;
         }
