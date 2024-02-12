@@ -7,6 +7,8 @@ using Mango.Services.OrderAPI.RabbitMQSender;
 using Mango.Services.OrderAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Stripe;
 using Stripe.Checkout;
 
@@ -38,7 +40,57 @@ namespace Mango.Services.OrderAPI.Controllers
             StripeConfiguration.ApiKey = SD.StripeSessionKey;
         }
 
-         
+
+        [Authorize]
+        [HttpGet("get_orders")]
+        public ResponseDto? Get(string? userId)
+        {
+            try
+            {
+                IEnumerable<OrderHeader> headers;
+                if (User.IsInRole(SD.RoleAdmin))
+                {
+                    headers = _db.OrderHeaders
+                        .Include(header => header.OrderDetails)
+                        .OrderByDescending(header => header.Id)
+                        .ToList();
+                }
+                else
+                {
+                    headers = _db.OrderHeaders
+                        .Include(header => header.OrderDetails)
+                        .Where(header => header.UserId == userId)
+                        .OrderByDescending(header => header.Id)
+                        .ToList();
+                }
+                _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(headers);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [Authorize]
+        [HttpGet("get_order/{id:int}")]
+        public ResponseDto? Get(int id)
+        {
+            try
+            {
+                OrderHeader header = _db.OrderHeaders.Include(header => header.OrderDetails).First(header => header.Id == id);
+                _response.Result = _mapper.Map<OrderHeaderDto>(header);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+
         [Authorize]
         [HttpPost("create_order")]
         public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
