@@ -7,5 +7,9 @@ namespace Mango.Web.Service.IService
         Task<ResponseDto> CreateOrderAsync(CartDto cartDto);
         Task<ResponseDto> CreateStripeSessionAsync(StripeRequestDto stripeRequestDto);
         Task<ResponseDto> ValidateStripeSessionAsync(int orderHeaderId);
+        Task<ResponseDto> GetAllOrdersAsync(string? userId);
+        Task<ResponseDto> GetOrderAsync(int orderId);
+        Task<ResponseDto> UpdateOrderStatusAsync(int orderId, string newStatus);
+
     }
 }
