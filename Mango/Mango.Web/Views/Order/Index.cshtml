@@ -3,7 +3,7 @@
 	var status = Context.Request.Query["status"];
 	var approved = string.Empty;
 	var readyforpickup = string.Empty;
-	var cancelled = string.Empty;
+	var canceled = string.Empty;
 	var all = string.Empty;
 
 	switch (status)
@@ -14,8 +14,8 @@
 		case "readyforpickup":
 			readyforpickup = "active text-white bg-secondary";
 			break;
-		case "cancelled":
-			cancelled = "active text-white bg-secondary";
+		case "canceled":
+			canceled = "active text-white bg-secondary";
 			break;
 		default:
 			all = "active text-white bg-secondary";
@@ -36,8 +36,8 @@
 			<a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="readyforpickup">
 			<li class="list-group-item @readyforpickup">Ready for Pikcup</li>
 			</a>
-			<a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="cancelled">
-			<li class="list-group-item @cancelled">Cancelled</li>
+			<a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="canceled">
+			<li class="list-group-item @canceled">Canceled</li>
 			</a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="all">
 			<li class="list-group-item @all">All</li>
