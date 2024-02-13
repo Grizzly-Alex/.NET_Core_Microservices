@@ -103,22 +103,27 @@
                                     </div>
                                 </li>
                             </ul>
-
                             @if (User.IsInRole(SD.RoleAdmin))
                             {
-                                @if (Model.Status == SD.StatusApproved)
+                                @if(Model.Status == SD.StatusApproved)
                                 {
-                                    <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.Id" type="submit" class="btn btn-success form-control my-1">Ready for Pickup</button>
+                                    <button asp-action="OrderReadyForpickup"
+                                    asp-route-orderId="@Model.Id" 
+                                    type="submit" class="btn btn-success from-control my-1">Ready for Pickup</button>
                                 }
                                 @if (Model.Status == SD.StatusReadyForPickup)
                                 {
-                                    <button asp-action="CompleteOrder" asp-route-orderId="@Model.Id" type="submit" class="btn btn-success form-control my-1">Complete Order</button>
+                                    <button asp-action="CompleteOrder"
+                                    asp-route-orderId="@Model.Id"
+                                    type="submit" class="btn btn-success from-control my-1">Complete Order</button>
                                 }
-
-                                if (Model.Status == SD.StatusApproved || Model.Status == SD.StatusReadyForPickup)
+                                @if (Model.Status == SD.StatusReadyForPickup || Model.Status == SD.StatusApproved)
                                 {
-                                    <button asp-action="CancelOrder" asp-route-orderId="@Model.Id" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                    <button asp-action="CancelOrder"
+                                    asp-route-orderId="@Model.Id"
+                                    type="submit" class="btn btn-danger from-control my-1">Cancel Order</button>
                                 }
+                                                               
                             }
                         </div>
                     </div>

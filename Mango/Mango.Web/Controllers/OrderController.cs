@@ -34,7 +34,7 @@ namespace Mango.Web.Controllers
                 orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
             }
 
-            if (User.IsInRole(SD.RoleAdmin) && userId != orderHeaderDto.UserId)
+            if (!User.IsInRole(SD.RoleAdmin) && userId != orderHeaderDto.UserId)
             {
                 return NotFound();
             }
