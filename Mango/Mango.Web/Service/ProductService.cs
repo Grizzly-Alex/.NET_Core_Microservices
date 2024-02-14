@@ -20,6 +20,7 @@ namespace Mango.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = product,
                 Url = SD.ProductAPIBase + "/api/product",
+                ContentType = SD.ContentType.MultipartFormData,
             });
         }
 
@@ -30,7 +31,8 @@ namespace Mango.Web.Service
                 ApiType = SD.ApiType.PUT,
                 Data = product,
                 Url = SD.ProductAPIBase + "/api/product",
-            });
+				ContentType = SD.ContentType.MultipartFormData,
+			});
         }
 
         public async Task<ResponseDto> DeleteProductAsync(int id)
