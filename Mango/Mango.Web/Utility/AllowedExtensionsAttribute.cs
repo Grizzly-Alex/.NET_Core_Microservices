@@ -6,7 +6,7 @@ namespace Mango.Web.Utility
     {
         private readonly string[] _extensions;
 
-        public AllowedExtensionsAttribute(string[] extenstions)
+        public AllowedExtensionsAttribute(params string[] extenstions)
         {
             _extensions = extenstions;    
         }
@@ -24,7 +24,7 @@ namespace Mango.Web.Utility
                 }
             }
 
-            return base.IsValid(value, validationContext);
+            return ValidationResult.Success;
         }
     }
 }
