@@ -25,6 +25,12 @@
             DELETE,
         }
 
+        public enum ContentType
+        {
+            Json,
+            MultipartFormData
+        }
+
         public const string StatusPending = "Pending";
         public const string StatusApproved = "Approved";
         public const string StatusReadyForPickup = "ReadyForPickup";
