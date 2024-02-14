@@ -4,6 +4,7 @@ using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Mango.Services.ProductAPI.Controllers
 {
@@ -124,6 +125,16 @@ namespace Mango.Services.ProductAPI.Controllers
             try
             {
                 Product obj = _db.Products.First(product => product.Id == id);
+
+                if (!obj.ImageLocalPath.IsNullOrEmpty())
+                {
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), obj.ImageLocalPath!);
+                    FileInfo file = new FileInfo(oldFilePathDirectory); 
+                    if (file.Exists) 
+                    {
+                        file.Delete();
+                    }
+                }
 
                 _db.Products.Remove(obj);
                 _db.SaveChanges();
