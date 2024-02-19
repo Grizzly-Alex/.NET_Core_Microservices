@@ -13,26 +13,6 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto> CreateOrderAsync(CartDto cart)
-        {
-            return await _baseService.SendAsync(new RequestDto()
-            {
-                ApiType = SD.ApiType.POST,
-                Data = cart,
-                Url = SD.OrderAPIBase + "/api/order/create_order",
-            });
-        }
-
-        public async Task<ResponseDto> CreateStripeSessionAsync(StripeRequestDto stripeRequestDto)
-        {
-            return await _baseService.SendAsync(new RequestDto()
-            {
-                ApiType = SD.ApiType.POST,
-                Data = stripeRequestDto,
-                Url = SD.OrderAPIBase + "/api/order/create_stripe_session",
-            });
-        }
-
         public async Task<ResponseDto> GetAllOrdersAsync(string? userId)
         {
             return await _baseService.SendAsync(new RequestDto()
@@ -51,6 +31,16 @@ namespace Mango.Web.Service
             });
         }
 
+        public async Task<ResponseDto> CreateOrderAsync(CartDto cart)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cart,
+                Url = SD.OrderAPIBase + "/api/order/create_order",
+            });
+        }
+
         public async Task<ResponseDto> UpdateOrderStatusAsync(int orderId, string newStatus)
         {
             return await _baseService.SendAsync(new RequestDto()
@@ -58,6 +48,16 @@ namespace Mango.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = newStatus,
                 Url = SD.OrderAPIBase + $"/api/order/update_order_status/{orderId}",
+            });
+        }
+
+        public async Task<ResponseDto> CreateStripeSessionAsync(StripeRequestDto stripeRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = stripeRequestDto,
+                Url = SD.OrderAPIBase + "/api/order/create_stripe_session",
             });
         }
 
