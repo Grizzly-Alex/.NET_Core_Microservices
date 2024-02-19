@@ -176,7 +176,7 @@
     },
     //"OrderAPI": "https://localhost:7004"
     {
-      "DownstreamPathTemplate": "/api/order/get_orders/{id}",
+      "DownstreamPathTemplate": "/api/order/get_orders?userId=/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
